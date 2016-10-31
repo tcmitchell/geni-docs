@@ -2,16 +2,16 @@
 
 = GENI API Identifiers =
 
-GENI identifies objects (be it a researcher, resource, clearinghouse, or aggregate manager) with a [http://en.wikipedia.org/wiki/Uniform_Resource_Name Uniform Resource Name (URN)].  
+GENI identifies objects (be it a researcher, resource, clearinghouse, or aggregate manager) with a [http://en.wikipedia.org/wiki/Uniform_Resource_Name Uniform Resource Name (URN)].
 
-''' The format of a GENI URN is''': `urn:publicid:IDN+<authority string>+<type>+<name>`  
+''' The format of a GENI URN is''': `urn:publicid:IDN+<authority string>+<type>+<name>`
 
 The GENI URN format is adapted from the [http://www.protogeni.net/trac/protogeni/wiki/URNs ProtoGENI URN format] and the [http://testglobalnoc.grnoc.iu.edu/gmoc/file-bin/urn-proposal3.pdf GMOC GENI URN proposal].  All sections of the URN are mandatory.  Note that additional '+' characters are allowed in the `<name>` section.
 
 === Public Identifiers ===
-GENI URNs are in the [http://www.faqs.org/rfcs/rfc3151.html URN namespace for Public Identifiers].  As such, each GENI URN is of the form: `urn:publicid:{transcribed-public-identifier}`.  [http://www.faqs.org/rfcs/rfc3151.html RFC 3151] describes how public identifiers are transcribed to URNs (which involves collapsing whitespace and replacing certain characters with `%` encoded values).  
+GENI URNs are in the [http://www.faqs.org/rfcs/rfc3151.html URN namespace for Public Identifiers].  As such, each GENI URN is of the form: `urn:publicid:{transcribed-public-identifier}`.  [http://www.faqs.org/rfcs/rfc3151.html RFC 3151] describes how public identifiers are transcribed to URNs (which involves collapsing whitespace and replacing certain characters with `%` encoded values).
 
-The public identifier section of a GENI URN must begin with "IDN ".  When transcribed, this means that all GENI URNs begin with "urn:publicid:IDN+".  
+The public identifier section of a GENI URN must begin with "IDN ".  When transcribed, this means that all GENI URNs begin with "urn:publicid:IDN+".
 
 To transcribe a public ID to a URN use the following rules, from RFC 3151:
 
@@ -71,7 +71,7 @@ Examples of additional types of objects from the ProtoGENI documentation:
 || The Utah Emulab slice authority || `urn:publicid:IDN+emulab.net+authority+sa` ||
 || Sliver `123` in the Utah Emulab aggregate manager || `urn:publicid:IDN+emulab.net+sliver+123` ||
 
-In the GENI API, URNs are used to name slices (as seen as arguments in GENI API calls), to identify users, and to label resources.  URNs are also used in GENI certificates (to bind public keys to identifiers) and in Credentials (to grant permissions to source identifiers on target identifiers).  
+In the GENI API, URNs are used to name slices (as seen as arguments in GENI API calls), to identify users, and to label resources.  URNs are also used in GENI certificates (to bind public keys to identifiers) and in Credentials (to grant permissions to source identifiers on target identifiers).
 
 
 === Authority String ===
@@ -109,7 +109,7 @@ The <type> string has not yet been completely specified, but is used to identify
 `vlan`
  A shared VLAN, that may cross slices. This VLAN may or may not cross aggregates, as in the GENI openflow mesoscale. VLAN URNs should name the VLAN, not identify the specific VLAN tag, as that may vary across aggregates and switches.
 `tool`
- A GENI tool (i.e. a hosted experimenter tool like [https://portal.geni.net the GENI Portal]). The `toplevelauthority` indicates the authority certifying that the holder of a certificate naming this URN operates a tool with the given name. 
+ A GENI tool (i.e. a hosted experimenter tool like [https://portal.geni.net the GENI Portal]). The `toplevelauthority` indicates the authority certifying that the holder of a certificate naming this URN operates a tool with the given name.
 
 Additional types may be defined in the future.
 
