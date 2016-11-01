@@ -183,20 +183,20 @@ However, names for certain URN types are restricted:
 
 Slice::
 * Slice URN alone is a label - unique at a point in time but not over time.
-* Format: `urn:publicid:IDN+<SA name>+slice+<slice name>`
+* Format: `urn:publicid:IDN+<SA name>\+slice+<slice name>`
 * Slice names are <=19 characters, only alphanumeric plus hyphen (no hyphen in first character): `'^[a-zA-Z0-9][-a-zA-Z0-9]\{0,18\}$'`
 * Slice names are case insensitive for comparison purposes, but should be treated as case sensitive for display purposes. In other words, servers should preserve the case.
 
 Sliver::
 * Sliver URN should be unique over time within an AM for record-keeping / operations purposes.
-* Format: `urn:publicid:IDN+<AM name>+sliver+<sliver name>`
+* Format: `urn:publicid:IDN+<AM name>\+sliver+<sliver name>`
 * Sliver names
 ** Must be unique over time within that AM, and are selected by the AM.
 ** May use only alphanumeric characters plus hyphen, period, or underscore: `'[a-zA-Z0-9\.\-_]+'`
 
 User::
 * Usernames are case-insensitive internally, though they may be case-sensitive in display.
-** For example, !JohnSmth as a display name is johnsmth internally, and there cannot also be a user `JOHNSMTH`.
+** For example, JohnSmth as a display name is johnsmth internally, and there cannot also be a user `JOHNSMTH`.
 ** In other words, usernames are case insensitive for comparison but case preserving.
 * Usernames should begin with a letter and be alphanumeric or underscores; no hyphen or '.': `('^[a-zA-Z][\w]\{0,7\}$')`.
 * Usernames are limited to 8 characters.
@@ -204,8 +204,8 @@ User::
 
 Tool::
 * Tool names are case-insensitive internally, though they may be case-sensitive in display.
-** For example, !JohnSmth as a display name is johnsmth internally, and there cannot also be a user `JOHNSMTH`.
-* Tool names should begin with a letter and be alphanumeric or underscore, hyphen, at sign or period: ('^[a-zA-Z][a-ZA-Z0-9\-_@\.]{0,63}$').
+** For example, JohnSmth as a display name is johnsmth internally, and there cannot also be a user `JOHNSMTH`.
+* Tool names should begin with a letter and be alphanumeric or underscore, hyphen, at sign or period: `('^[a-zA-Z][a-ZA-Z0-9\-_@\.]{0,63}$')`.
 * Tool names are limited to 64 characters.
 * Tool URNs (which contain the authority name and the tool instance name) are required to be temporally and globally unique.
 * Tool names should encode both the tool type and instance. For example `portal-gpo` or `genidesktop-uky`.
