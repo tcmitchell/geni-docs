@@ -11,7 +11,7 @@ In the GENI APIs, these certificates are used for both server side authenticatio
 Once the SSL library has established the secure authenticated communications channel using these certificates, the GENI AM API uses the certificates as part of [wiki:GeniApiCredentials] to authorize the client to execute actions on the server.
 
 === Format ===
-A GENI certificate is an [http://en.wikipedia.org/wiki/X.509 X509v3 certificate] that specifies a GENI identifier ([wiki:GeniApiIdentifiers URN]) in the X509v3 subjectAltName extension.  It is stored in PEM format which is described in the [http://en.wikipedia.org/wiki/X.509 X.509 wikipedia page]. The GENI identifier (URN) is placed in [http://en.wikipedia.org/wiki/Uniform_Resource_Identifier URI format] and begins with: 'URI:urn:publicid:IDN+'.  The certificate's Common Name (CN) values for the Issuer and Subject are not specified by the GENI specifications and can be any valid common name.  
+A GENI certificate is an [http://en.wikipedia.org/wiki/X.509 X509v3 certificate] that specifies a GENI identifier ([wiki:GeniApiIdentifiers URN]) in the X509v3 subjectAltName extension.  It is stored in PEM format which is described in the [http://en.wikipedia.org/wiki/X.509 X.509 wikipedia page]. The GENI identifier (URN) is placed in [http://en.wikipedia.org/wiki/Uniform_Resource_Identifier URI format] and begins with: 'URI:urn:publicid:IDN+'.  The certificate's Common Name (CN) values for the Issuer and Subject are not specified by the GENI specifications and can be any valid common name.
 
 Certificate contents restrictions and requirements:
  - {{{Version}}} shall be properly marked: 3
@@ -61,9 +61,9 @@ Certificate:
                     9e:cb:02:d6:2c:b0:77:81:c1
                 Exponent: 65537 (0x10001)
         X509v3 extensions:
-            X509v3 Subject Key Identifier: 
+            X509v3 Subject Key Identifier:
                 A8:85:C1:50:7C:B6:99:CC:34:80:5A:91:1A:1E:C0:35:59:B8:87:3D
-            X509v3 Subject Alternative Name: 
+            X509v3 Subject Alternative Name:
                 URI:urn:publicid:IDN+emulab.net+user+ahelsing, email:ahelsing@emulab.net, URI:urn:uuid:433b6339-43f0-4d88-b5f8-5709de6dff3b
     Signature Algorithm: md5WithRSAEncryption
         82:54:0d:13:e1:81:22:de:98:2e:e0:c2:3b:a0:43:e9:b6:26:
@@ -104,7 +104,7 @@ For sample python code to validate GENI certificates, see http://git.planet-lab.
 
 === Hierarchy ===
 
-CA hierarchies are supported.  In a CA hierarchy,  a root CA can create normal certificates as well as intermediate CA certificates.  Intermediate CAs are able to issue certificates that are verified by following the chain from the certificate to the intermediate CA's certificate to the root certificate.  Typically, the verifier will only have the root CA's certificate installed for verification, and the intermediate CA's certificates is appended to the certificates it issues (called PEM chaining).    In GENI, user and slice authorities are CAs. Certificates for CAs are required to be declared as a CA, and others (users, slices) should NOT be declared as a CA, as in: 
+CA hierarchies are supported.  In a CA hierarchy,  a root CA can create normal certificates as well as intermediate CA certificates.  Intermediate CAs are able to issue certificates that are verified by following the chain from the certificate to the intermediate CA's certificate to the root certificate.  Typically, the verifier will only have the root CA's certificate installed for verification, and the intermediate CA's certificates is appended to the certificates it issues (called PEM chaining).    In GENI, user and slice authorities are CAs. Certificates for CAs are required to be declared as a CA, and others (users, slices) should NOT be declared as a CA, as in:
 {{{
             X509v3 Basic Constraints: critical
                 CA:TRUE
@@ -159,7 +159,7 @@ X509 PEM formatted certificates.  If the certificate was issued by an intermedia
 
 SFA servers act as Certificate Authorities (CAs).  They create and sign certificates for their own objects (such as nodes in their aggregate) and for their users.
 
-CAs can form a hierarchy in which a root CA creates new intermediate CAs as children.  The intermediate CAs have certificates signed by the root CA and "CA:TRUE" in the basic constraints section of their certificate.  Intermediate CAs can create new certificates as well as create new intermediate CAs.  As an example, there might be a GENI root, and a GENI.US, GENI.EU, GENI.EU.ES, and GENI.AS set of intermediate CAs.  
+CAs can form a hierarchy in which a root CA creates new intermediate CAs as children.  The intermediate CAs have certificates signed by the root CA and "CA:TRUE" in the basic constraints section of their certificate.  Intermediate CAs can create new certificates as well as create new intermediate CAs.  As an example, there might be a GENI root, and a GENI.US, GENI.EU, GENI.EU.ES, and GENI.AS set of intermediate CAs.
 
 Each SFA registry is a CA.  Each SFA Aggregate Manager will have a set of CA keys that they use for verification.  To verify a certificate, the certificate must be signed by one of the trusted CAs or one of their children (or children's children etc.).  If the certificate is signed by an intermediate CA that the AM does not have a key for, then it is necessary to verify that the intermediate CA is an offspring of one of the trusted CAs.  This is accomplished by verifying the certificate, then the parent's certificate, all the way up to a trusted CA.  Therefore, certificates from intermediate CAs should always include this chain of intermediate certificates.
 
@@ -171,7 +171,7 @@ Currently, user certificates are obtained out of band.
 
 [attachment:foobar_cert_chain.pem]
 
-This certificate is a user certificate for urn:publicid:IDN+geni.net:gpo+user+jkarlin.  It is a chain certificate because it also includes the certificate for urn:publicid:IDN+geni.net:gpo+authority+registry and urn:publicid:IDN+geni.net+authority+registry, which is self signed.  
+This certificate is a user certificate for urn:publicid:IDN+geni.net:gpo+user+jkarlin.  It is a chain certificate because it also includes the certificate for urn:publicid:IDN+geni.net:gpo+authority+registry and urn:publicid:IDN+geni.net+authority+registry, which is self signed.
 
 == OpenSSL Primer ==
 
@@ -179,7 +179,7 @@ As a primer for creating CAs, subordinates, and certificates, we provide the [at
 
 ==== Creating a Root CA ====
 
-In a new directory, run 
+In a new directory, run
 {{{
 ./CA.sh -newca
 }}}
@@ -235,7 +235,7 @@ And now you can distribute the newchain.pem and newkey.pem to the user or object
 {{{
 #!comment
 === FIXME ===
- - how does this relate to SFA? PG? PL? 
+ - how does this relate to SFA? PG? PL?
  - what are rules/specs on the Issuer CN? That's a CH? A CA? How is the name specified? How does that relate to a URN?
  - Ditto for the Subject CN? And how does the Subject CN string relate to the URN in the Subject Alt Name?
  - What are the naming rules for relating issuer CN to Subject CN? IE must one be derived from the other?
