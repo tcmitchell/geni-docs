@@ -1,17 +1,17 @@
 = GENI API: Certificates =
 
-GENI uses X.509 v3 certificates to (1) Authenticate actors in the GENI APIs, (2) protect message transport, specifically the SSL transport layer for APIs such as the AM API, and (3) to formally identify actors as members within [wiki:GeniApiCredentials GENI credentials].
+GENI uses X.509 v3 certificates to (1) Authenticate actors in the GENI APIs, (2) protect message transport, specifically the SSL transport layer for APIs such as the AM API, and (3) to formally identify actors as members within link:GeniApiCredentials.adoc[GENI credentials].
 
-The GENI Aggregate Manager API uses http://en.wikipedia.org/wiki/X.509[X509 certificates] (formally defined http://tools.ietf.org/html/rfc5280[in RFC5280]) to bind public keys to identifiers ([wiki:GeniApiIdentifiers URNs]).  Only the holder of the private key corresponding to the public key contained in the certificate can act as the the user named by the URN. Aggregates are required to properly validate all certificates to authenticate access to AM API calls, and fail calls that supply invalid certificates.
+The GENI Aggregate Manager API uses http://en.wikipedia.org/wiki/X.509[X509 certificates] (formally defined http://tools.ietf.org/html/rfc5280[in RFC5280]) to bind public keys to identifiers (link:GeniApiIdentifiers.adoc[URNs]).  Only the holder of the private key corresponding to the public key contained in the certificate can act as the the user named by the URN. Aggregates are required to properly validate all certificates to authenticate access to AM API calls, and fail calls that supply invalid certificates.
 
 In the GENI APIs, these certificates are used for both server side authentication and client side authentication in SSL connections (actually https).
 
-Once the SSL library has established the secure authenticated communications channel using these certificates, the GENI AM API uses the certificates as part of [wiki:GeniApiCredentials] to authorize the client to execute actions on the server.
+Once the SSL library has established the secure authenticated communications channel using these certificates, the GENI AM API uses the certificates as part of link:GeniApiCredentials.adoc[GENI credentials] to authorize the client to execute actions on the server.
 
 == Format ==
 A GENI certificate is an
 http://en.wikipedia.org/wiki/X.509[X509v3 certificate] that specifies a GENI
-identifier ([wiki:GeniApiIdentifiers URN]) in the X509v3 subjectAltName
+identifier (link:GeniApiIdentifiers.adoc[URN]) in the X509v3 subjectAltName
 extension.  It is stored in PEM format which is described in the
 http://en.wikipedia.org/wiki/X.509[X.509 wikipedia page]. The GENI identifier
 (URN) is placed in
@@ -25,18 +25,18 @@ Certificate contents restrictions and requirements:
 * `Version` shall be properly marked: 3
 * `serialNum` is required to be unique within the certificate authority: each newly issued certificate must have a unique serial number.
 * The Distinguished Name should include a human readable identifier, for both subject and issuer. Details are not specified
-* Only authority certificates (but all authorities that issue certificates) shall be marked {{{CA:TRUE}}} in the x509 v3 basic constraints; Slices and users shall be marked `FALSE`.
+* Only authority certificates (but all authorities that issue certificates) shall be marked `CA:TRUE` in the x509 v3 basic constraints; Slices and users shall be marked `FALSE`.
 * The Subject Alternative Name field must include 3 pieces of information
-** Entries are comma separated ('{{{, }}}'), and may be in any order.
+** Entries are comma separated (`','`), and may be in any order.
 ** The URN identifier, following GENI URN standards as described here: GeniApiIdentifiers
-*** The URN is identifiable by looking for the entry beginning "{{{URI:urn:publicid:IDN}}}", for example: {{{URI:urn:publicid:IDN+emulab.net+user+stoller}}}.
+*** The URN is identifiable by looking for the entry beginning `"URI:urn:publicid:IDN"`, for example: `URI:urn:publicid:IDN+emulab.net+user+stoller`.
 ** A UUID, providing a unique ID for the entity.
 *** The UUID must be used with the URN to fully identify the slice or user. UUID alone should not be accepted. This ensures that the authority certifying the slice or user is always identified when referring to the slice or user.
 *** In the hexadecimal digit string format given in http://www.ietf.org/rfc/rfc4122.txt[RFC 4122]
 *** The UUID is identified with this prefix: `URI:urn:uuid` (as specified by RFC4122), for example: `URI:urn:uuid:33178d77-a930-40b1-9469-3aae08755743`.
 *** The `COPY` tag is not supported.
 ** The email address is an http://tools.ietf.org/html/rfc2822#section-3.4.1[RFC2822] compliant and working address for contacting the subject of the certificate (experimenter, authority administrator, or slice owner).
-*** The email entry is identified by the prefix "email", for example: {{{email:stoller@example.com}}}
+*** The email entry is identified by the prefix "email", for example: `email:stoller@example.com`
 *** The `COPY` tag is not supported.
 *** Note that the slice and user email addresses are addresses for contacting the responsible party - the slice owner or creator and the user. Tool certificates shall provide an address to contact the administrators of the tool instance - the organization or individual who applied for the certificate and who stands behind its integrity. These addresses may be aliases.
 * Recommendation: Authorities are encouraged but not required to include a URL where more information about the subject is available (e.g. slice authority registry URL). That URL may be included in a certificate extension, in the DN, or in the subjectAltName.
@@ -105,7 +105,8 @@ To be valid, certificates must:
 * Be issued by a trusted certificate (possibly via a certificate chain)
 ** Issuer's certificate must also validate
 ** Signers must be marked as a CA, per above
-** Signers must have a URN indicating they are of type `authority`, as described in the [wiki:GeniApiIdentifiers URN wiki page]
+** Signers must have a URN indicating they are of type `authority`, as described in the
+   link:GeniApiIdentifiers.adoc[GENI Identifiers documentation]
 ** Signers must have namespace authority over the subject of the certificate
 *** Essentially, the authority name of the signer must be a prefix of the subject name. EG: `a\.b` is an authority for, `a\.b.c.d`, but `a` is not an authority for, `a\.b.c.d` (the subject's name starts with `a.b`, where we've escaped the `.`). Also any authority name is an authority for itself.
 
