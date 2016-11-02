@@ -1,5 +1,3 @@
-[[PageOutline]]
-
 = GENI API Identifiers =
 
 GENI identifies objects (be it a researcher, resource, clearinghouse, or
@@ -13,7 +11,7 @@ http://www.protogeni.net/trac/protogeni/wiki/URNs[ProtoGENI URN format]
 and the
 http://testglobalnoc.grnoc.iu.edu/gmoc/file-bin/urn-proposal3.pdf[GMOC GENI URN proposal].  All sections of the URN are mandatory.  Note that additional '+' characters are allowed in the `<name>` section.
 
-=== Public Identifiers ===
+== Public Identifiers ==
 GENI URNs are in the http://www.faqs.org/rfcs/rfc3151.html[URN namespace for Public Identifiers].  As such, each GENI URN is of the form: `urn:publicid:{transcribed-public-identifier}`.  http://www.faqs.org/rfcs/rfc3151.html[RFC 3151] describes how public identifiers are transcribed to URNs (which involves collapsing whitespace and replacing certain characters with `%` encoded values).
 
 The public identifier section of a GENI URN must begin with "IDN ".  When transcribed, this means that all GENI URNs begin with "urn:publicid:IDN+".
@@ -84,7 +82,7 @@ resource-name::
     _toplevelauthority_ or _resource-type_. However, individual
     authorities may choose to define additional semantics for resource names.
 
-=== Examples and Usage ===
+== Examples and Usage ==
 
 The following examples are borrowed from the GMOC Proposal:
 
@@ -112,7 +110,7 @@ used in GENI certificates (to bind public keys to identifiers) and in
 Credentials (to grant permissions to source identifiers on target identifiers).
 
 
-=== Authority String ===
+== Authority String ==
 Authorities are resource namespaces.  For instance, 'plc' is the overall
 PlanetLab namespace and 'plc.princeton' and 'plc.bbn' are specific
 namespaces for the Princeton and BBN PlanetLab sites.  The authority
@@ -149,7 +147,7 @@ the authority that manages the existence of these objects.
 * component URNs ("node" or "link" types for example) are issued by an
   aggregate manager or a component manager ("+authority+am" or "+authority+cm")
 
-=== Type ===
+== Type ==
 The <type> string has not yet been completely specified, but is used to identify the kind of resource being identified. Many APIs require use of URNs with particular types.  Use the defined types below, unless they simply do not fit for you.  In which case, please mailto:help@geni.net[contact the GPO] to inform them of your new type.
 
 authority::
@@ -176,7 +174,7 @@ Additional types may be defined in the future.
 _Note: For ProtoGENI compatibility, slice credentials should be signed by an
 authority with name "sa", e.g., urn:publicid:IDN+gcf:gpo+authority+sa._
 
-=== Name ===
+== Name ==
 The <name> string can in general be any valid string constrained by the URN character set (e.g. no whitespace).
 
 However, names for certain URN types are restricted:
