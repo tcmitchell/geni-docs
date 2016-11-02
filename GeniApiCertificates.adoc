@@ -110,7 +110,10 @@ To be valid, certificates must:
 ** Signers must have namespace authority over the subject of the certificate
 *** Essentially, the authority name of the signer must be a prefix of the subject name. EG: `a\.b` is an authority for, `a\.b.c.d`, but `a` is not an authority for, `a\.b.c.d` (the subject's name starts with `a.b`, where we've escaped the `.`). Also any authority name is an authority for itself.
 
-For sample python code to validate GENI certificates, see http://git.planet-lab.org/?p=sfa.git;a=tree;f=sfa/trust;hb=HEAD, or the [http://trac.gpolab.bbn.com/gcf/ GCF package], under `gcf/src/sfa/trust`.
+For sample python code to validate GENI certificates see the
+https://github.com/GENI-NSF/geni-tools/tree/master/src/gcf/sfa/trust[src/gcf/sfa/trust directory]
+of the
+https://github.com/GENI-NSF/geni-tools[geni-tools repository].
 
 == Hierarchy ==
 
