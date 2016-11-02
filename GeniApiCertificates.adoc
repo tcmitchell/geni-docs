@@ -2,38 +2,48 @@
 
 GENI uses X.509 v3 certificates to (1) Authenticate actors in the GENI APIs, (2) protect message transport, specifically the SSL transport layer for APIs such as the AM API, and (3) to formally identify actors as members within [wiki:GeniApiCredentials GENI credentials].
 
-The GENI Aggregate Manager API uses [http://en.wikipedia.org/wiki/X.509 X509 certificates] (formally defined [http://tools.ietf.org/html/rfc5280 in RFC5280]) to bind public keys to identifiers ([wiki:GeniApiIdentifiers URNs]).  Only the holder of the private key corresponding to the public key contained in the certificate can act as the the user named by the URN. Aggregates are required to properly validate all certificates to authenticate access to AM API calls, and fail calls that supply invalid certificates.
+The GENI Aggregate Manager API uses http://en.wikipedia.org/wiki/X.509[X509 certificates] (formally defined http://tools.ietf.org/html/rfc5280[in RFC5280]) to bind public keys to identifiers ([wiki:GeniApiIdentifiers URNs]).  Only the holder of the private key corresponding to the public key contained in the certificate can act as the the user named by the URN. Aggregates are required to properly validate all certificates to authenticate access to AM API calls, and fail calls that supply invalid certificates.
 
 In the GENI APIs, these certificates are used for both server side authentication and client side authentication in SSL connections (actually https).
 
 Once the SSL library has established the secure authenticated communications channel using these certificates, the GENI AM API uses the certificates as part of [wiki:GeniApiCredentials] to authorize the client to execute actions on the server.
 
 == Format ==
-A GENI certificate is an [http://en.wikipedia.org/wiki/X.509 X509v3 certificate] that specifies a GENI identifier ([wiki:GeniApiIdentifiers URN]) in the X509v3 subjectAltName extension.  It is stored in PEM format which is described in the [http://en.wikipedia.org/wiki/X.509 X.509 wikipedia page]. The GENI identifier (URN) is placed in [http://en.wikipedia.org/wiki/Uniform_Resource_Identifier URI format] and begins with: 'URI:urn:publicid:IDN+'.  The certificate's Common Name (CN) values for the Issuer and Subject are not specified by the GENI specifications and can be any valid common name.
+A GENI certificate is an
+http://en.wikipedia.org/wiki/X.509[X509v3 certificate] that specifies a GENI
+identifier ([wiki:GeniApiIdentifiers URN]) in the X509v3 subjectAltName
+extension.  It is stored in PEM format which is described in the
+http://en.wikipedia.org/wiki/X.509[X.509 wikipedia page]. The GENI identifier
+(URN) is placed in
+http://en.wikipedia.org/wiki/Uniform_Resource_Identifier[URI format]
+and begins with: 'URI:urn:publicid:IDN+'.  The certificate's Common Name (CN)
+values for the Issuer and Subject are not specified by the GENI specifications
+and can be any valid common name.
 
 Certificate contents restrictions and requirements:
- - {{{Version}}} shall be properly marked: 3
- - {{{serialNum}}} is required to be unique within the certificate authority: each newly issued certificate must have a unique serial number.
- - The Distinguished Name should include a human readable identifier, for both subject and issuer. Details are not specified
- - Only authority certificates (but all authorities that issue certificates) shall be marked {{{CA:TRUE}}} in the x509 v3 basic constraints; Slices and users shall be marked {{{FALSE}}}.
- - The Subject Alternative Name field must include 3 pieces of information
-  - Entries are comma separated ('{{{, }}}'), and may be in any order.
-  - The URN identifier, following GENI URN standards as described here: GeniApiIdentifiers
-   - The URN is identifiable by looking for the entry beginning "{{{URI:urn:publicid:IDN}}}", for example: {{{URI:urn:publicid:IDN+emulab.net+user+stoller}}}.
-  - A UUID, providing a unique ID for the entity.
-   - The UUID must be used with the URN to fully identify the slice or user. UUID alone should not be accepted. This ensures that the authority certifying the slice or user is always identified when referring to the slice or user.
-   - In the hexadecimal digit string format given in [http://www.ietf.org/rfc/rfc4122.txt RFC 4122]
-   - The UUID is identified with this prefix: "{{{URI:urn:uuid}}}" (as specified by RFC4122), for example: {{{URI:urn:uuid:33178d77-a930-40b1-9469-3aae08755743}}}.
-   - The `COPY` tag is not supported.
-  - The email address is an [http://tools.ietf.org/html/rfc2822#section-3.4.1 RFC2822] compliant and working address for contacting the subject of the certificate (experimenter, authority administrator, or slice owner).
-   - The email entry is identified by the prefix "{{{email:}}}", for example: {{{email:stoller@example.com}}}
-   - The `COPY` tag is not supported.
-   - Note that the slice and user email addresses are addresses for contacting the responsible party - the slice owner or creator and the user. Tool certificates shall provide an address to contact the administrators of the tool instance - the organization or individual who applied for the certificate and who stands behind its integrity. These addresses may be aliases.
- - Recommendation: Authorities are encouraged but not required to include a URL where more information about the subject is available (e.g. slice authority registry URL). That URL may be included in a certificate extension, in the DN, or in the subjectAltName.
+
+* `Version` shall be properly marked: 3
+* `serialNum` is required to be unique within the certificate authority: each newly issued certificate must have a unique serial number.
+* The Distinguished Name should include a human readable identifier, for both subject and issuer. Details are not specified
+* Only authority certificates (but all authorities that issue certificates) shall be marked {{{CA:TRUE}}} in the x509 v3 basic constraints; Slices and users shall be marked `FALSE`.
+* The Subject Alternative Name field must include 3 pieces of information
+** Entries are comma separated ('{{{, }}}'), and may be in any order.
+** The URN identifier, following GENI URN standards as described here: GeniApiIdentifiers
+*** The URN is identifiable by looking for the entry beginning "{{{URI:urn:publicid:IDN}}}", for example: {{{URI:urn:publicid:IDN+emulab.net+user+stoller}}}.
+** A UUID, providing a unique ID for the entity.
+*** The UUID must be used with the URN to fully identify the slice or user. UUID alone should not be accepted. This ensures that the authority certifying the slice or user is always identified when referring to the slice or user.
+*** In the hexadecimal digit string format given in http://www.ietf.org/rfc/rfc4122.txt[RFC 4122]
+*** The UUID is identified with this prefix: `URI:urn:uuid` (as specified by RFC4122), for example: `URI:urn:uuid:33178d77-a930-40b1-9469-3aae08755743`.
+*** The `COPY` tag is not supported.
+** The email address is an http://tools.ietf.org/html/rfc2822#section-3.4.1[RFC2822] compliant and working address for contacting the subject of the certificate (experimenter, authority administrator, or slice owner).
+*** The email entry is identified by the prefix "email", for example: {{{email:stoller@example.com}}}
+*** The `COPY` tag is not supported.
+*** Note that the slice and user email addresses are addresses for contacting the responsible party - the slice owner or creator and the user. Tool certificates shall provide an address to contact the administrators of the tool instance - the organization or individual who applied for the certificate and who stands behind its integrity. These addresses may be aliases.
+* Recommendation: Authorities are encouraged but not required to include a URL where more information about the subject is available (e.g. slice authority registry URL). That URL may be included in a certificate extension, in the DN, or in the subjectAltName.
 
 The following is an example GENI certificate that uses a dotted notation for the common names:
 
-{{{
+-----
 Certificate:
     Data:
         Version: 3 (0x2)
@@ -72,52 +82,53 @@ Certificate:
         3b:f2:9b:bd:a9:87:87:e1:d2:44:1b:4f:e0:5c:f9:73:16:38:
         4c:16:68:a3:14:73:9c:97:b9:e6:0a:3e:a8:41:8e:ea:d8:4d:
         5b:76
-}}}
+-----
 
 The textual representation of the certificate (above) was derived from the PEM formatted certificate (below) by running:
-{{{
+-----
 openssl x509 -in mycert.pem -text
-}}}
+-----
 
-{{{
+-----
 -----BEGIN CERTIFICATE-----
 MIICpTCCAg4CAQMwDQYJKoZIhvcNAQEEBQAwGDEWMBQGA1UEAxMNcGxjLmdwby5z
 .....
 H9807SDMyH8r
 -----END CERTIFICATE-----
-}}}
+-----
 
 == Validation ==
 To be valid, certificates must:
- - Follow the format rules above
- - Expire later than the current time
- - Be issued by a trusted certificate (possibly via a certificate chain)
-  - Issuer's certificate must also validate
-  - Signers must be marked as a CA, per above
-  - Signers must have a URN indicating they are of type `authority`, as described in the [wiki:GeniApiIdentifiers URN wiki page]
-  - Signers must have namespace authority over the subject of the certificate
-   - Essentially, the authority name of the signer must be a prefix of the subject name. EG: `a\.b` is an authority for, `a\.b.c.d`, but `a` is not an authority for, `a\.b.c.d` (the subject's name starts with `a.b`, where we've escaped the `.`). Also any authority name is an authority for itself.
+
+* Follow the format rules above
+* Expire later than the current time
+* Be issued by a trusted certificate (possibly via a certificate chain)
+** Issuer's certificate must also validate
+** Signers must be marked as a CA, per above
+** Signers must have a URN indicating they are of type `authority`, as described in the [wiki:GeniApiIdentifiers URN wiki page]
+** Signers must have namespace authority over the subject of the certificate
+*** Essentially, the authority name of the signer must be a prefix of the subject name. EG: `a\.b` is an authority for, `a\.b.c.d`, but `a` is not an authority for, `a\.b.c.d` (the subject's name starts with `a.b`, where we've escaped the `.`). Also any authority name is an authority for itself.
 
 For sample python code to validate GENI certificates, see http://git.planet-lab.org/?p=sfa.git;a=tree;f=sfa/trust;hb=HEAD, or the [http://trac.gpolab.bbn.com/gcf/ GCF package], under `gcf/src/sfa/trust`.
 
 == Hierarchy ==
 
 CA hierarchies are supported.  In a CA hierarchy,  a root CA can create normal certificates as well as intermediate CA certificates.  Intermediate CAs are able to issue certificates that are verified by following the chain from the certificate to the intermediate CA's certificate to the root certificate.  Typically, the verifier will only have the root CA's certificate installed for verification, and the intermediate CA's certificates is appended to the certificates it issues (called PEM chaining).    In GENI, user and slice authorities are CAs. Certificates for CAs are required to be declared as a CA, and others (users, slices) should NOT be declared as a CA, as in:
-{{{
+-----
             X509v3 Basic Constraints: critical
                 CA:TRUE
-}}}
+-----
 
 Since Aggregates and Control Frameworks are likely to only have the root CA's certificate installed, and not the intermediate CA certs, all certs signed by an intermediate CA should be chained.  A chained certificate is simply a certificate that appends the issuer's certificate to the end of the file.  For instance, if A is a root CA cert, B is an intermediate CA cert, and C is an end-user certificate, then C's chained certificate is:
-{{{
+-----
 C
 B
 A (optional)
-}}}
+-----
 
 An example chained certificate which shows the Usert cert, the intermediate CA cert, and the root CA cert (in that order from top to bottom) in chained PEM format:
 
-{{{
+-----
 jkarlin@rabbit:~/.omni$ cat jkarlin.pem
 -----BEGIN CERTIFICATE-----
 MIICpTCCAg4CAQMwDQYJKoZIhvcNAQEEBQAwGDEWMBQGA1UEAxMNcGxjLmdwby5z
@@ -135,9 +146,9 @@ MIIB+DCCAWECAQMwDQYJKoZIhvcNAQEEBQAwEjEQMA4GA1UEAxMHcGxjLmdwbzAe
 qhhEfubmtMeptqr40vuXaioWnBlY3CDRO88sew==
 -----END CERTIFICATE-----
 
-}}}
+-----
 
-{{{
+/////
 #!comment
 
 THE HIERARCHY STUFF IS NO LONGER IN THE API
@@ -228,9 +239,9 @@ cat $ROOTCA/cacert.pem >> newchain.pem  # replace $ROOTCA with your root CA's di
 }}}
 
 And now you can distribute the newchain.pem and newkey.pem to the user or object.
-}}}
+/////
 
-{{{
+/////
 #!comment
 === FIXME ===
  - how does this relate to SFA? PG? PL?
@@ -238,4 +249,4 @@ And now you can distribute the newchain.pem and newkey.pem to the user or object
  - Ditto for the Subject CN? And how does the Subject CN string relate to the URN in the Subject Alt Name?
  - What are the naming rules for relating issuer CN to Subject CN? IE must one be derived from the other?
  - clarify that the example chained cert is showing a user, a CH, and a CA in that order, all in PEM format
-}}}
+/////
