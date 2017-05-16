@@ -130,19 +130,19 @@ This operation is similar to ProtoGENI's link:http://www.protogeni.net/trac/prot
 
 Delete a sliver by stopping it if it is still running, and then deallocating the resources associated with it.  This call will stop and deallocate all resources associated with the given slice URN.
 
-{{{
+----
 boolean DeleteSliver(string slice_urn, string credentials[])
-}}}
+----
 
  `slice_urn`::
    The URN of the slice whose sliver should be deleted.
 
  `credentials`::
-   An array of credentials. At least one credential must be a valid slice credential for the slice specified in {{{slice_urn}}}. Note that the semantics of this argument is not clear. Alternative interpretations might, for example, accumulate privileges from each valid credential to determine overall caller permissions.
+   An array of credentials. At least one credential must be a valid slice credential for the slice specified in `slice_urn`. Note that the semantics of this argument is not clear. Alternative interpretations might, for example, accumulate privileges from each valid credential to determine overall caller permissions.
 
 Returns true on success and false on failure.
 
-This operation is similar to ProtoGENI's [http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#DeleteSliver DeleteSliver] operation and to the [http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf SFA]'s !DeleteSlice operation (sec. 6.2.3).
+This operation is similar to ProtoGENI's link:http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#DeleteSliver[DeleteSliver] operation and to the link:http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf[SFA]'s !DeleteSlice operation (sec. 6.2.3).
 
 
 [[sliver-status]]
@@ -150,19 +150,19 @@ This operation is similar to ProtoGENI's [http://www.protogeni.net/trac/protogen
 
 Get the status of a sliver.
 
-{{{
+----
 struct SliverStatus(string slice_urn, string credentials[])
-}}}
+----
 
  `slice_urn`::
    The URN of the slice for which the sliver status is requested.
 
  `credentials`::
-   An array of credentials. At least one credential must be a valid slice credential for the slice specified in {{{slice_urn}}}. Note that the semantics of this argument is not clear. Alternative interpretations might, for example, accumulate privileges from each valid credential to determine overall caller permissions.
+   An array of credentials. At least one credential must be a valid slice credential for the slice specified in `slice_urn`. Note that the semantics of this argument is not clear. Alternative interpretations might, for example, accumulate privileges from each valid credential to determine overall caller permissions.
 
 Returns an XML-RPC struct upon successful completion. The struct is of the following form:
 
-{{{
+----
 {
   geni_urn: <sliver URN>
   geni_status: ready
@@ -174,7 +174,7 @@ Returns an XML-RPC struct upon successful completion. The struct is of the follo
                       geni_error: ''}
                   ]
 }
-}}}
+----
 
 The top level members of the returned struct pertain to the sliver as a whole. These members are:
 
@@ -182,7 +182,7 @@ The top level members of the returned struct pertain to the sliver as a whole. T
     The URN of the sliver as a string. This is the ''sliver'' and not the ''slice'', and should be selected by the aggregate manager.
 
  `geni_status`::
-    A string indicating the status of the sliver. Possible values are: {{{configuring}}}, {{{ready}}}, {{{failed}}}, and {{{unknown}}}. Configuring indicates that at least one resource is being configured and none have failed. Ready indicates that all resources in the sliver are ready. Failed indicates that at least one resource in the sliver has failed. Unknown indicates that the state of the sliver is not one of the known states. More detailed information can be found in the value of the geni_resources member.
+    A string indicating the status of the sliver. Possible values are: `configuring`, `ready`, `failed`, and `unknown`. Configuring indicates that at least one resource is being configured and none have failed. Ready indicates that all resources in the sliver are ready. Failed indicates that at least one resource in the sliver has failed. Unknown indicates that the state of the sliver is not one of the known states. More detailed information can be found in the value of the geni_resources member.
 
  `geni_resources`::
     An array of structs. Each struct in the array gives the status of each resource in the sliver. The members of these structs are described below.
@@ -193,54 +193,54 @@ The members of the resource struct(s) are as follows:
     The URN of the resource as a string. This is specific to the ''sliver'', and should be selected by the aggregate manager to allow status reporting and control at the finest level supported at that aggregate. It may be a sliver URN if there is only 1 resource in the sliver.
 
  `geni_status`::
-    A string indicating the status of the resource. Possible values are: {{{configuring}}}, {{{ready}}}, {{{failed}}}, and {{{unknown}}}. Configuring indicates that the resources is being configured and is not yet ready for use. Ready indicates that the resource is ready. Failed indicates that the resource has failed. Unknown indicates that the state of the resource is not one of the known states.
+    A string indicating the status of the resource. Possible values are: `configuring`, `ready`, `failed`, and `unknown`. Configuring indicates that the resources is being configured and is not yet ready for use. Ready indicates that the resource is ready. Failed indicates that the resource has failed. Unknown indicates that the state of the resource is not one of the known states.
 
  `geni_error`::
-    A free form string. The aggregate manager should set this to a string that could be presented to a researcher to give more detailed information about the state of the resource if its status is {{{failed}}}.
+    A free form string. The aggregate manager should set this to a string that could be presented to a researcher to give more detailed information about the state of the resource if its status is `failed`.
 
 
-This operation is similar to ProtoGENI's [http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#SliverStatus,WaitForStatus SliverStatus] operation. The [http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf SFA] specification does not include this operation.
+This operation is similar to ProtoGENI's link:http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#SliverStatus,WaitForStatus[SliverStatus] operation. The link:http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf[SFA] specification does not include this operation.
 
 
 == RenewSliver ==
 
 Renews the resources in a sliver, extending the lifetime of the slice.
 
-{{{
+----
 boolean RenewSliver(string slice_urn,
                     string credentials[],
                     string expiration_time)
-}}}
+----
 
  `slice_urn`::
    The URN of the slice that is to have its sliver renewed.
 
  `credentials`::
-   An array of credentials. At least one credential must be a valid slice credential for the slice specified in {{{slice_urn}}}. Note that the semantics of this argument is not clear. Alternative interpretations might, for example, accumulate privileges from each valid credential to determine overall caller permissions.
+   An array of credentials. At least one credential must be a valid slice credential for the slice specified in `slice_urn`. Note that the semantics of this argument is not clear. Alternative interpretations might, for example, accumulate privileges from each valid credential to determine overall caller permissions.
 
  `expiration_time`::
-    A string in [http://tools.ietf.org/html/rfc3339 RFC 3339] format indicating the expiration_time desired by the caller. Note these times, per the RFC, must be in or relative to UTC. This time must be less than or equal to the slice duration in the slice credential. In other words, at least one supplied (slice) credential must still be valid at the desired new expiration time for this call to succeed.
+    A string in link:http://tools.ietf.org/html/rfc3339[RFC 3339] format indicating the expiration_time desired by the caller. Note these times, per the RFC, must be in or relative to UTC. This time must be less than or equal to the slice duration in the slice credential. In other words, at least one supplied (slice) credential must still be valid at the desired new expiration time for this call to succeed.
 
 
-Returns true on successful completion, false otherwise. It is assumed that the caller will have already extended the lifetime of the slice credential with the appropriate slice authority prior to calling !RenewSliver.
+Returns true on successful completion, false otherwise. It is assumed that the caller will have already extended the lifetime of the slice credential with the appropriate slice authority prior to calling RenewSliver.
 
-This operation is similar to ProtoGENI's [http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#RenewSlice RenewSlice] operation. The [http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf SFA] specification does not include this operation.
+This operation is similar to ProtoGENI's link:http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#RenewSlice[RenewSlice] operation. The link:http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf[SFA] specification does not include this operation.
 
 
 == Shutdown ==
 
 Perform an emergency shut down of a sliver. This operation is intended for administrative use. The sliver is shut down but remains available for further forensics.
 
-{{{
+----
 boolean Shutdown(string slice_urn, string credentials[])
-}}}
+----
 
  `slice_urn`::
    The URN of the slice is to have its sliver shut down.
 
  `credentials`::
-   An array of credentials. At least one credential must be a valid slice credential for the slice specified in {{{slice_urn}}} or a valid administrative credential with sufficient privileges. Note that the semantics of this argument is not clear. Alternative interpretations might, for example, accumulate privileges from each valid credential to determine overall caller permissions.
+   An array of credentials. At least one credential must be a valid slice credential for the slice specified in `slice_urn` or a valid administrative credential with sufficient privileges. Note that the semantics of this argument is not clear. Alternative interpretations might, for example, accumulate privileges from each valid credential to determine overall caller permissions.
 
 Returns true on success, false otherwise.
 
-This operation is similar to ProtoGENI's [http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#Shutdown Shutdown] operation. The [http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf SFA] specification does not include this operation.
+This operation is similar to ProtoGENI's link:http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#Shutdown[Shutdown] operation. The link:http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf[SFA] specification does not include this operation.
