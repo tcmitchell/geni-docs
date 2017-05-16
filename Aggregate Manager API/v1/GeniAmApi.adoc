@@ -1,90 +1,87 @@
-[[PageOutline]]
-
 = GENI Aggregate Manager API Version 1 =
 
 The GENI Aggregate Manager API allows aggregates to advertise resources and to allocate resources to Slices in the form of Slivers.
 
-This is the GENI AM API Version '''1'''.
+This is the GENI AM API Version *1*.
 
 See Also:
- * [http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf Slice-based Facility Architecture (SFA) specification]
- * [http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa-impl.pdf PlanetLab Implementation of the Slice-Based Facility Architecture]
- * [http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2 ProtoGENI Component Manager API revision 2]
- * [wiki:GeniApi GENI API] implementation status
- * [wiki:GAPI_AM_API Latest] revision of this API
- * [wiki:GAPI_AM_API_DRAFT Draft API Revisions] proposed for future versions of this API
+
+* link:http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf[Slice-based Facility Architecture (SFA) specification]
+* link:http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa-impl.pdf[PlanetLab Implementation of the Slice-Based Facility Architecture]
+* link:http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2[ProtoGENI Component Manager API revision 2]
+* link:/GeniApi[GENI API] implementation status
+* link:/GAPI_AM_API[Latest] revision of this API
+* link:/GAPI_AM_API_DRAFT[Draft API Revisions] proposed for future versions of this API
 
 == Versions ==
 
- * Latest: Always available on [wiki:GAPI_AM_API the main AM API page]
+* Latest: Always available on [wiki:GAPI_AM_API the main AM API page]
   * As of this writing, that is [wiki:GAPI_AM_API_V2 version 2]
- * Previous: Version 1 - Documented on this page
- * [wiki:GAPI_AM_API_DRAFT Draft Changes]
+* Previous: Version 1 - Documented on this page
+* [wiki:GAPI_AM_API_DRAFT Draft Changes]
   * As of this writing, those will be for version 3 of the API
   * Documents proposed changes for future versions of the API
 
------
-== !GetVersion ==
+== GetVersion ==
 
 Return the version of the GENI Aggregate API supported by this aggregate.
 
-{{{
+----
 struct GetVersion()
-}}}
+----
 
-The result is an [http://www.xmlrpc.com/spec XML-RPC] struct with at least the following members:
+The result is an link:http://www.xmlrpc.com/spec[XML-RPC] struct with at least the following members:
 
-{{{
+----
 {
   int geni_api;
 }
-}}}
+----
 
  `geni_api`::
     An integer indicating the revision of the Aggregate Manager API that an aggregate supports. This page documents version 1 of the API.
 
-Implementations can add additional members to the struct as desired. The prefix {{{geni_}}} is reserved for members that are part of this API specification. Implementation should choose an appropriate prefix to avoid conflicts.
+Implementations can add additional members to the struct as desired. The prefix `geni_` is reserved for members that are part of this API specification. Implementation should choose an appropriate prefix to avoid conflicts.
 
-This operation is similar to ProtoGENI's [http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#GetVersion GetVersion] operation. The [http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf SFA] specification does not include this operation.
+This operation is similar to ProtoGENI's link:http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#GetVersion[GetVersion] operation. The link:http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf[SFA] specification does not include this operation.
 
------
-== !ListResources ==
+== ListResources ==
 
 Return information about available resources or resources allocated to a slice.
 
-{{{
+----
 string ListResources(string credentials[], struct options)
-}}}
+----
 
  `credentials[]`::
     An array of credentials. At least one credential must be valid for this operation (signed by a valid GENI certificate authority either directly or by chain, and not expired). Note that the semantics of this argument is not clear. Alternative interpretations might, for example, accumulate privileges from each valid credential to determine overall caller permissions.
 
  `options`::
-    An [http://www.xmlrpc.com/spec XML-RPC] struct containing members indicating the set of resources the caller is interested in or the format of the result. In addition to the members specified below, callers can pass additional members that specific aggregate manager implementations might honor. The prefix {{{geni_}}} is reserved for members that are part of this API specification. Implementations should choose an appropriate prefix to avoid conflicts.
+    An link:http://www.xmlrpc.com/spec[XML-RPC] struct containing members indicating the set of resources the caller is interested in or the format of the result. In addition to the members specified below, callers can pass additional members that specific aggregate manager implementations might honor. The prefix `geni_` is reserved for members that are part of this API specification. Implementations should choose an appropriate prefix to avoid conflicts.
 
 The following members are available for use in the options parameter. All aggregate managers are required to implement these options.
 
-{{{
+----
 {
   boolean geni_available;
   boolean geni_compressed;
   string geni_slice_urn;
 }
-}}}
+----
 
  `geni_available`::
-    An [http://www.xmlrpc.com/spec XML-RPC] boolean value indicating whether the caller is interested in all resources or available resources. If this value is true, the result should contain only available resources. If this value is false both available and allocated resources should be returned. The Aggregate Manager is free to limit visibility of certain resources based on the credentials parameter.
+    An link:http://www.xmlrpc.com/spec[XML-RPC] boolean value indicating whether the caller is interested in all resources or available resources. If this value is true, the result should contain only available resources. If this value is false both available and allocated resources should be returned. The Aggregate Manager is free to limit visibility of certain resources based on the credentials parameter.
 
  `geni_compressed`::
-    An [http://www.xmlrpc.com/spec XML-RPC] boolean value indicating whether the caller would like the result to be compressed. If the value is true, the returned resource list will be compressed according to [http://www.ietf.org/rfc/rfc1950.txt RFC 1950].
+    An link:http://www.xmlrpc.com/spec[XML-RPC] boolean value indicating whether the caller would like the result to be compressed. If the value is true, the returned resource list will be compressed according to link:http://www.ietf.org/rfc/rfc1950.txt[RFC 1950].
 
  `geni_slice_urn`::
-    An [http://www.xmlrpc.com/spec XML-RPC] string indicating that the caller is interested in the set of resources allocated to the slice named by this URN. If no resources are allocated to the indicated slice by this aggregate, an empty RSPEC should be returned.
+    An link:http://www.xmlrpc.com/spec[XML-RPC] string indicating that the caller is interested in the set of resources allocated to the slice named by this URN. If no resources are allocated to the indicated slice by this aggregate, an empty RSPEC should be returned.
 
 
 The return value is an RSPEC in text format if geni_compressed is unspecified or set to false. The return value will be a base 64 encoded if geni_compressed is specified and set to true.
 
-This operation is similar to ProtoGENI's [http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#DiscoverResources DiscoverResources] operation and to the [http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf SFA]'s !GetResources operation (sec. 6.2.4).
+This operation is similar to ProtoGENI's link:http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#DiscoverResources[DiscoverResources] operation and to the link:http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf[SFA]'s GetResources operation (sec. 6.2.4).
 
 
 -----
