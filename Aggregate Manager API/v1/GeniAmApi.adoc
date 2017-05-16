@@ -45,6 +45,7 @@ Implementations can add additional members to the struct as desired. The prefix 
 
 This operation is similar to ProtoGENI's link:http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#GetVersion[GetVersion] operation. The link:http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf[SFA] specification does not include this operation.
 
+[[list-resources]]
 == ListResources ==
 
 Return information about available resources or resources allocated to a slice.
@@ -84,30 +85,30 @@ The return value is an RSPEC in text format if geni_compressed is unspecified or
 This operation is similar to ProtoGENI's link:http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#DiscoverResources[DiscoverResources] operation and to the link:http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf[SFA]'s GetResources operation (sec. 6.2.4).
 
 
------
-== !CreateSliver ==
+== CreateSliver ==
 
-Allocate resources to a slice. This operation is expected to start the allocated resources asynchronously after the operation has successfully completed. Callers can check on the status of the resources using [wiki:GAPI_AM_API#SliverStatus SliverStatus].
+Allocate resources to a slice. This operation is expected to start the allocated resources asynchronously after the operation has successfully completed. Callers can check on the status of the resources using xref:sliver-status[SliverStatus].
 
-{{{
+----
 string CreateSliver(string slice_urn,
                     string credentials[],
                     string rspec,
                     struct users[])
-}}}
+----
 
  `slice_urn`::
-   The URN of the slice to which the resources specified in {{{rspec}}} will be allocated.
+   The URN of the slice to which the resources specified in `rspec` will be allocated.
 
  `credentials`::
-   An array of credentials. At least one credential must be a valid slice credential for the slice specified in {{{slice_urn}}}. Note that the semantics of this argument is not clear. Alternative interpretations might, for example, accumulate privileges from each valid credential to determine overall caller permissions.  Aggregates should ensure that the expiration time of the slice does not exceed the expiration time of the slice credential used to perform this operation.
+   An array of credentials. At least one credential must be a valid slice credential for the slice specified in `slice_urn`. Note that the semantics of this argument is not clear. Alternative interpretations might, for example, accumulate privileges from each valid credential to determine overall caller permissions.  Aggregates should ensure that the expiration time of the slice does not exceed the expiration time of the slice credential used to perform this operation.
 
  `rspec`::
-   An RSPEC containing the resources that the caller is requesting for allocation to the slice specified in {{{slice_urn}}}. These are expected to be based on resources returned by a previous invocation of [#ListResources ListResources].
+   An RSPEC containing the resources that the caller is requesting for allocation to the slice specified in `slice_urn`. These are expected to be based on resources returned by a previous invocation of xref:list-resources[ListResources].
 
   `users`::
   An array of user structs, which contain information about the users that might login to the sliver that the AM needs to know about. Each struct must include the key 'keys', which is an array of strings and can be empty. The struct must also include the key 'urn', which is the user’s URN string. The users array can be empty. For example:
-{{{
+
+----
 [
   {
     urn: urn:publicid:IDN+geni.net:gcf+user+alice
@@ -118,14 +119,14 @@ string CreateSliver(string slice_urn,
     keys: [<ssh key>]
   }
 ]
-}}}
+----
+
 The return value is an RSPEC indicating the resources that were allocated to the slice. The result RSPEC may contain additional information about the allocated resources.
 
-This operation is similar to ProtoGENI's [http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#CreateSliver CreateSliver] operation and to the [http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf SFA]'s !CreateSlice operation (sec. 6.2.1).
+This operation is similar to ProtoGENI's link:http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#CreateSliver[CreateSliver] operation and to the link:http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf[SFA]'s CreateSlice operation (sec. 6.2.1).
 
 
------
-== !DeleteSliver ==
+== DeleteSliver ==
 
 Delete a sliver by stopping it if it is still running, and then deallocating the resources associated with it.  This call will stop and deallocate all resources associated with the given slice URN.
 
@@ -144,8 +145,8 @@ Returns true on success and false on failure.
 This operation is similar to ProtoGENI's [http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#DeleteSliver DeleteSliver] operation and to the [http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf SFA]'s !DeleteSlice operation (sec. 6.2.3).
 
 
------
-== !SliverStatus ==
+[[sliver-status]]
+== SliverStatus ==
 
 Get the status of a sliver.
 
@@ -201,8 +202,7 @@ The members of the resource struct(s) are as follows:
 This operation is similar to ProtoGENI's [http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#SliverStatus,WaitForStatus SliverStatus] operation. The [http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf SFA] specification does not include this operation.
 
 
------
-== !RenewSliver ==
+== RenewSliver ==
 
 Renews the resources in a sliver, extending the lifetime of the slice.
 
@@ -227,7 +227,6 @@ Returns true on successful completion, false otherwise. It is assumed that the c
 This operation is similar to ProtoGENI's [http://www.protogeni.net/trac/protogeni/wiki/ComponentManagerAPIV2#RenewSlice RenewSlice] operation. The [http://svn.planet-lab.org/attachment/wiki/WikiStart/sfa.pdf SFA] specification does not include this operation.
 
 
------
 == Shutdown ==
 
 Perform an emergency shut down of a sliver. This operation is intended for administrative use. The sliver is shut down but remains available for further forensics.
